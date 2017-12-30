@@ -59,6 +59,7 @@ int socket_write(int fd, const char *buffer, unsigned int nbytes)
 	unsigned int left = nbytes;
 	int retry_cnt = 0;
 	ssize_t nb;
+	const struct timespec SLEEP_TIME = { 0, 20 * 1000 * 1000 };
 
 	/* If you set socket to blocking mode, you need poll */
 	/*
