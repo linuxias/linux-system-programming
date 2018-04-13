@@ -7,8 +7,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#define SERVER_IP "10.254.241.206"
-#define SERVER_PORT 1973
+#define SERVER_IP 127.0.0.1 //IP
+#define SERVER_PORT 8888    //PORT
 #define BUF_SIZE 1024
 
 #define exit_if(SRC, DST, FUNC) \
