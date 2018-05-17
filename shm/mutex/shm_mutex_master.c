@@ -101,7 +101,8 @@ int main(int argc, char *argv[])
         pthread_mutex_unlock(&shm->mtx);
     }
 
-	sleep(10);
+	sleep(3);
+    printf("%d\n", shm->idx);
     __destory_shared_memory();
 
     return 0;

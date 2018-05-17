@@ -63,8 +63,6 @@ static int __init_shared_memory(void)
 
     close(shm_fd);
 
-    memset(shm, 0, shm_size);
-
 	return 0;
 }
 
