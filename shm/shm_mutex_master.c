@@ -1,5 +1,3 @@
-
-
 #include <stdio.h>
 #include <sys/types.h>
 #include <sys/shm.h>
@@ -9,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
-#include <odp_api.h>
+#include <errno.h>
 
 #define retm_if(expr, val, msg) do { \
     if (expr) \
@@ -39,13 +37,11 @@
 
 typedef struct shm_struct {
     pthread_mutex_t mtx;
-    pthread_cond_t cond;
     int idx;
 } shm_struct_t;
 
 static shm_struct_t *shm;
 static pthread_mutexattr_t mtx_attr;
-static pthread_condattr_t cond_attr;
 
 static int __init_shared_memory(void)
 {
@@ -77,22 +73,11 @@ static int __init_shared_memory(void)
     ret = pthread_mutex_init(&shm->mtx, &mtx_attr);
     rete_if(ret != 0, ret, "pthread_mutex_init");
 
-    ret = pthread_condattr_init(&cond_attr);
-    rete_if(ret != 0, ret, "pthread_condattr_init");
-
-    ret = pthread_condattr_setpshared(&cond_attr, PTHREAD_PROCESS_SHARED);
-    rete_if(ret != 0, ret, "pthread_condattr_setpshared");
-
-    ret = pthread_cond_init(&shm->cond, &cond_attr);
-    rete_if(ret != 0, ret, "pthread_cond_init");
-
 	return 0;
 }
 
 static int __destory_shared_memory(void)
 {
-    pthread_cond_destroy(&shm->cond);
-    pthread_condattr_destroy(&cond_attr);
     pthread_mutex_destroy(&shm->mtx);
     pthread_mutexattr_destroy(&mtx_attr);
 
@@ -116,6 +101,7 @@ int main(int argc, char *argv[])
         pthread_mutex_unlock(&shm->mtx);
     }
 
+	sleep(10);
     __destory_shared_memory();
 
     return 0;

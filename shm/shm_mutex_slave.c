@@ -7,7 +7,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <pthread.h>
-#include <odp_api.h>
+#include <errno.h>
 
 #define retm_if(expr, val, msg) do { \
     if (expr) \
@@ -37,13 +37,10 @@
 
 typedef struct shm_struct {
     pthread_mutex_t mtx;
-    pthread_cond_t cond;
     int idx;
 } shm_struct_t;
 
 static shm_struct_t *shm;
-static pthread_mutexattr_t mtx_attr;
-static pthread_condattr_t cond_attr;
 
 static int __init_shared_memory(void)
 {
