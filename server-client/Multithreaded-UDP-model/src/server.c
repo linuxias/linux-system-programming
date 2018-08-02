@@ -32,7 +32,7 @@ int main()
 
     memset(&s_addr, 0, sizeof(struct sockaddr_in));
     s_addr.sin_family = AF_INET;
-    s_addr.sin_addr.s_addr = INADDR_ANY;
+    s_addr.sin_addr.s_addr = htons(INADDR_ANY);
     s_addr.sin_port = htons(PORT_NUMBER);
 
     ret = bind(sfd, (struct sockaddr *)&s_addr, sizeof(s_addr));
