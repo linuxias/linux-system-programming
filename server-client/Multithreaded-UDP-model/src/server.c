@@ -32,6 +32,7 @@ int main()
     struct sockaddr_in c_addr;
     client_h handle = NULL;
     pthread_t thr;
+    fd_set r_fds;
 
     sfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sfd == -1) {
@@ -58,19 +59,33 @@ int main()
         if (handle == NULL)
             continue;
 
-        handle->buf_size = recvfrom(sfd, handle->buf, CLIENT_BUF_MAX, 0, 
-                (struct sockaddr *)&handle->sock_addr, &handle->sock_len);
-        if (handle->buf_size < 0)
-            continue;
+        FD_ZERO(&r_fds);
+        FD_SET(sfd, &r_fds);
 
-        ret = pthread_create(&thr, 0, __work, handle);
+        ret = select(sfd + 1, &r_fds, 0, 0, 0);
         if (ret < 0) {
-            perror("pthread_create");
+            perror("select");
             continue;
         }
 
-        pthread_detach(thr);
+        if (FD_ISSET(sfd, &r_fds)) {
+            handle->buf_size = recvfrom(sfd, handle->buf, CLIENT_BUF_MAX, 0, 
+                    (struct sockaddr *)&handle->sock_addr, &handle->sock_len);
+            if (handle->buf_size < 0)
+                continue;
+            printf("%ld", handle->buf_size);
+
+            ret = pthread_create(&thr, 0, __work, handle);
+            if (ret < 0) {
+                perror("pthread_create");
+                continue;
+            }
+
+            pthread_detach(thr);
+        }
     }
+
+    close(sfd);
 
     return 0;
 }
