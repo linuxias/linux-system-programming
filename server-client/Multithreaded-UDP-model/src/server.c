@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include <unistd.h>
 
 #include <sys/types.h>
@@ -14,6 +15,15 @@
 #define PORT_NUMBER 6200
 #define THREAD_MAX 10
 
+static void *__work(void *args)
+{
+    client_h handle = (client_h)args;
+
+    printf("%s\n", handle->buf);
+    sleep(1);
+    return NULL;
+}
+
 int main()
 {
     int ret;
@@ -21,8 +31,7 @@ int main()
     struct sockaddr_in s_addr;
     struct sockaddr_in c_addr;
     client_h handle = NULL;
-
-    s_daemon_become();
+    pthread_t thr;
 
     sfd = socket(AF_INET, SOCK_DGRAM, 0);
     if (sfd == -1) {
@@ -54,9 +63,14 @@ int main()
         if (handle->buf_size < 0)
             continue;
 
-        // TODO : This handle is sent to the parameter of pthread
+        ret = pthread_create(&thr, 0, __work, handle);
+        if (ret < 0) {
+            perror("pthread_create");
+            continue;
+        }
+
+        pthread_detach(thr);
     }
-    
 
     return 0;
 }
