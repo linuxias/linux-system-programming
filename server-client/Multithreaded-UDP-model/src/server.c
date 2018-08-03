@@ -28,7 +28,6 @@ int main()
     int ret;
     int sfd;
     struct sockaddr_in s_addr;
-    struct sockaddr_in c_addr;
     client_h handle = NULL;
     pthread_t thr;
     fd_set r_fds;
@@ -51,8 +50,6 @@ int main()
     }
 
     while (1) {
-        memset(&c_addr, 0, sizeof(struct sockaddr_in));
-
         handle = NULL;
         handle = (client_h)calloc(1, sizeof(struct _client_h));
         if (handle == NULL)
