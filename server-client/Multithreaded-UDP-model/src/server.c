@@ -20,7 +20,6 @@ static void *__work(void *args)
     client_h handle = (client_h)args;
 
     printf("%s\n", handle->buf);
-    sleep(1);
     return NULL;
 }
 
@@ -71,9 +70,10 @@ int main()
         if (FD_ISSET(sfd, &r_fds)) {
             handle->buf_size = recvfrom(sfd, handle->buf, CLIENT_BUF_MAX, 0, 
                     (struct sockaddr *)&handle->sock_addr, &handle->sock_len);
-            if (handle->buf_size < 0)
+            if (handle->buf_size < 0) {
+                perror("recvfrom");
                 continue;
-            printf("%ld", handle->buf_size);
+            }
 
             ret = pthread_create(&thr, 0, __work, handle);
             if (ret < 0) {
