@@ -46,7 +46,16 @@ void *s_async_queue_pop(SAyncQueue *queue)
     void *ret_data;
 
     pthread_mutex_lock(&queue->mtx);
-    // Todo : Insert while() statement for pop queue
+    if (s_queue_peek_tail_link(&queue->queue)) {
+        queue->waiting_threads++;
+
+        while (!s_queue_peek_tail_link(&queue->queue))
+            ptrehad_cond_wait(&queue->cond, &queue->mutex);
+
+        queue->waiting_threads--;
+    }
+
+    ret_data = s_queue_pop(&queue->queue);
     pthread_mutex_unlock(&queue->mtx);
 
     return ret_data;
