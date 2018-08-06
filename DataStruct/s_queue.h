@@ -18,4 +18,9 @@ void s_queue_destroy(SQueue queue);
 void s_queue_push(SQueue queue, void *data);
 
 void *s_queue_pop(SQueue *queue);
+
+SList *s_queue_peek_tail_link(SQueue *queue);
+
+SList *s_queue_peek_head_link(SQueue *queue);
+
 #endif /* __S_QUEUE_H__ */

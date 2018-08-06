@@ -65,3 +65,18 @@ void *s_queue_pop(SQueue *queue)
     return NULL;
 }
 
+SList *s_queue_peek_tail_link(SQueue *queue)
+{
+    if S_UNLIKELY (queue == NULL)
+        return NULL;
+
+    return queue->tail;
+}
+
+SList *s_queue_peek_head_link(SQueue *queue)
+{
+    if S_UNLIKELY (queue == NULL)
+        return NULL;
+
+    return queue->head;
+}
