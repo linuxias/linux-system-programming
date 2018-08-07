@@ -50,7 +50,7 @@ void *s_async_queue_pop(SAsyncQueue *queue)
     void *ret_data;
 
     pthread_mutex_lock(&queue->mtx);
-    if (s_queue_peek_tail_link(&queue->queue)) {
+    if (!s_queue_peek_tail_link(&queue->queue)) {
         queue->waiting_threads++;
 
         while (!s_queue_peek_tail_link(&queue->queue))
