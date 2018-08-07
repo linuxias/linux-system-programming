@@ -14,14 +14,14 @@ struct _SAsyncQueue {
     SQueue queue;
     unsigned int waiting_threads;
     unsigned int ref_count;
-}
+};
 
 SAsyncQueue *s_async_queue_create(void);
 
 void s_async_queue_destroy(SAsyncQueue *queue);
 
-void s_async_queue_push(SAyncQueue *queue, void *data);
+void s_async_queue_push(SAsyncQueue *queue, void *data);
 
-void *s_async_queue_pop(SAyncQueue *queue);
+void *s_async_queue_pop(SAsyncQueue *queue);
 
 #endif /* __S_AYNC_QUEUE_H__  */

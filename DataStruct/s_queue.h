@@ -3,19 +3,19 @@
 
 #include "s_list.h"
 
-typedef struct _SQueue SQueue
+typedef struct _SQueue SQueue;
 
 struct _SQueue {
     SList *head;
     SList *tail;
     int length;
-}
+};
 
-SQueue s_queue_create(void);
+SQueue *s_queue_create(void);
 
-void s_queue_destroy(SQueue queue);
+void s_queue_destroy(SQueue *queue);
 
-void s_queue_push(SQueue queue, void *data);
+void s_queue_push(SQueue *queue, void *data);
 
 void *s_queue_pop(SQueue *queue);
 

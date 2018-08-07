@@ -1,3 +1,7 @@
+#include <stdlib.h>
+
+#include <pthread.h>
+
 #include "s_async_queue.h"
 
 SAsyncQueue *s_async_queue_create(void)
@@ -41,7 +45,7 @@ void s_async_queue_push(SAsyncQueue *queue, void *data)
     pthread_mutex_unlock(&queue->mtx);
 }
 
-void *s_async_queue_pop(SAyncQueue *queue)
+void *s_async_queue_pop(SAsyncQueue *queue)
 {
     void *ret_data;
 
@@ -50,7 +54,7 @@ void *s_async_queue_pop(SAyncQueue *queue)
         queue->waiting_threads++;
 
         while (!s_queue_peek_tail_link(&queue->queue))
-            ptrehad_cond_wait(&queue->cond, &queue->mutex);
+            pthread_cond_wait(&queue->cond, &queue->mtx);
 
         queue->waiting_threads--;
     }

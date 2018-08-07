@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "s_list.h"
 #include "s_macros.h"
@@ -52,7 +53,7 @@ void *s_queue_pop(SQueue *queue)
         queue->head = node->next;
 
         if (queue->head)
-            queue->head->prev = NULL;
+            queue->head->pre = NULL;
         else
             queue->tail = NULL;
         s_list_free(node);
