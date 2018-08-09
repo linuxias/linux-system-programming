@@ -51,12 +51,7 @@ SFile *s_file_create(const char *path, int flag, int mode)
     }
 
     file->sb = sb;
-
-    file->fd = open(path, flag, mode);
-    if (file->fd == -1) {
-        s_file_Destroy(file);
-        return NULL;
-    }
+	file->status = S_FILE_STATUS_CLOSE;
 
     return file;
 }
@@ -72,6 +67,28 @@ void s_file_destroy(SFile *file)
         close(file->fd);
     free(file);
     file = NULL;
+}
+
+s_file_is_open(SFile *file)
+{
+	return file->status == S_FILE_STATUS_OPEN ? TRUE : FALSE;
+}
+
+int s_file_is_open(SFile *file)
+{
+	if S_UNLIKELY (file == NULL)
+		return -1;
+
+	if (file->status == S_FILE_STATUS_OPEN)
+		return -1;
+
+    file->fd = open(path, flag, mode);
+    if (file->fd == -1)
+        return -1;
+
+	file->status = S_FILE_STATUS_OPEN;
+
+	return 0;
 }
 
 int s_file_is_absolute_path(const char *path)
