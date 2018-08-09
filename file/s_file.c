@@ -49,7 +49,7 @@ SFile *s_file_create(const char *path, int flag, int mode)
         s_file_destroy(file);
         return NULL;
     }
-    
+
     file->sb = sb;
 
     file->fd = open(path, flag, mode);
