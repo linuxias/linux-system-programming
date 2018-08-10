@@ -1,6 +1,12 @@
 #ifndef __S_MACROS_H__
 #define __S_MACROS_H__
 
+#if     __GNUC__ > 2 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 8)
+#define S_GNUC_EXTENSION __extension__
+#else
+#define S_GNUC_EXTENSION
+#endif
+
 #if defined(__GNUC__) && (__GNUC__ > 2) && defined(__OPTIMIZE__)
 #define _S_BOOLEAN_EXPR(expr)                   \
          S_GNUC_EXTENSION ({                            \
